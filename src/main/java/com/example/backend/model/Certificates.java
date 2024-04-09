@@ -15,24 +15,19 @@ import java.util.Date;
  * @author PC
  */
 @Entity
-public class Certificate {
+public class Certificates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private Date startTime;
-    private Date endTime;
-    private String grade;
+    private int validYears;
 
-    public Certificate(Integer id, String name, Date startTime, Date endTime, String grade) {
+    public Certificates(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.grade = grade;
     }
 
-    public Certificate() {
+    public Certificates() {
     }
 
     public Integer getId() {
@@ -50,30 +45,4 @@ public class Certificate {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-    
-    
 }

@@ -1,23 +1,24 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Certificates;
-import com.example.backend.repository.CertificateRepository;
+import com.example.backend.model.Students;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.backend.repository.StudentRepository;
 
 @Service
-public class CertificateServiceImpl implements CertificateService{
+public class StudentrServiceImpl implements StudentService {
     @Autowired
-    private CertificateRepository repository;
-
+    private StudentRepository repository; 
+    
     @Override
-    public List<Certificates> getAllCertificate() {
+    public List<Students> getAllStudent() {
         return repository.findAll();
     }
 
     @Override
-    public Certificates getById(int id) {
+    public Students getById(int id) {
         return repository.findById(id).get();
     }
+    
 }
