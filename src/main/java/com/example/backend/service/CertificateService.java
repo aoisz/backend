@@ -1,9 +1,9 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Certificate;
+import com.example.backend.model.Certificates;
 import java.util.List;
 
 public interface CertificateService {
-    public List<Certificate> getAllCertificate();
-    public Certificate getById(int id);
+    public List<Certificates> getAllCertificate();
+    public Certificates getById(int id);
 }

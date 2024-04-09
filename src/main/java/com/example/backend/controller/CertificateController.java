@@ -1,10 +1,12 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Certificate;
+import com.example.backend.model.Certificates;
 import com.example.backend.service.CertificateService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +16,11 @@ public class CertificateController {
     @Autowired
     private CertificateService service;
     @GetMapping("/getAll")
-    public List<Certificate> getAllCertificate() {
+    public List<Certificates> getAllCertificate() {
         return service.getAllCertificate();
+    }
+    @PostMapping("/get/{id}")
+    public Certificates getById(@PathVariable("id") int id) {
+        return service.getById(id);
     }
 }
