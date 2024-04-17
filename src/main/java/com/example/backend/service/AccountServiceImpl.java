@@ -34,23 +34,19 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public String login(AccountTemplate input) {
         List<Account> accounts = repository.findAll();
-        String status = "";
+        Account account = new Account();
+        String status = null;
         boolean accountExist = false;
-        for(Account account : accounts) {
-            if(account.getUsername().equals(input.getUsername())) {
+        for(Account acc : accounts) {
+            if(acc.getUsername().equals(input.getUsername())) {
                 accountExist = true;
+                account = acc;
+                break;
             }
         }
-        if(!accountExist) {
-            status = "notfound";
-        }
-        else {
-            Optional<Account> optional = accounts
-                    .stream()
-                    .filter(account -> account.getPassword().equals(input.getPassword()))
-                    .findFirst();
-            if(optional.isPresent()) {
-                status = "found";
+        if(accountExist) {
+            if (account.getPassword().equals(input.getPassword())) {
+                status = account.getUsername();
             }
             else {
                 status = "error";

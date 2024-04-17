@@ -8,6 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 /**
  *
@@ -18,15 +21,15 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name="id",)
+    @OneToOne
+    @JoinColumn(name="id")
     private Students student;
     private String password;
     private String username;
 
-    public Account(Integer id, String student_id, String password, String username) {
+    public Account(Integer id, Students student, String password, String username) {
         this.id = id;
-        this.student_id = student_id;
+        this.student = student;
         this.password = password;
         this.username = username;
     }
@@ -42,12 +45,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getStudent_id() {
-        return student_id;
+    public Students getStudent() {
+        return student;
     }
 
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
+    public void setStudent(Students student) {
+        this.student = student;
     }
 
     public String getPassword() {
