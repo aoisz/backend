@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.repository.StudentRepository;
 
 @Service
-public class StudentrServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository repository; 
     
@@ -19,6 +19,11 @@ public class StudentrServiceImpl implements StudentService {
     @Override
     public Students getById(int id) {
         return repository.findById(id).get();
+    }
+
+    @Override
+    public Students getByStudentId(String studentId) {
+        return repository.findByStudentId(studentId).get();
     }
     
 }

@@ -25,9 +25,9 @@ public class StudentCertificate {
     private Date startDate;
     private Date expiredDate;
     private String grade;
-    private int score;
+    private float score;
 
-    public StudentCertificate(int id, Students student, Certificates certificate, Date startDate, Date expiredDate, String grade, int score) {
+    public StudentCertificate(int id, Students student, Certificates certificate, Date startDate, Date expiredDate, String grade, float score) {
         this.id = id;
         this.student = student;
         this.certificate = certificate;
@@ -88,11 +88,11 @@ public class StudentCertificate {
         this.grade = grade;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(float score) {
         this.score = score;
     }
 }
