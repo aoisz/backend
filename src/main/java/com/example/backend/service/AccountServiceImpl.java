@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService{
     public String login(AccountTemplate input) {
         List<Account> accounts = repository.findAll();
         Account account = new Account();
-        String status = null;
+        String status = "notexist";
         boolean accountExist = false;
         for(Account acc : accounts) {
             if(acc.getUsername().equals(input.getUsername())) {
@@ -52,6 +52,7 @@ public class AccountServiceImpl implements AccountService{
                 status = "error";
             }
         }
+        System.out.print(status);
         return status;
     }
 }

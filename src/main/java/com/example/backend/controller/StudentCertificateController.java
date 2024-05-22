@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.service.StudentCertificateService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/student_certificate")
@@ -23,5 +24,17 @@ public class StudentCertificateController {
     @GetMapping("/getByCertificateId/{certificate_id}")
     public List<StudentCertificate> getByCertificateId(@PathVariable("certificate_id") int certificate_id) {
         return service.getByCeritificateId(certificate_id);
+    }
+    
+    @GetMapping("/getCertificateByStudentId/{student_id}")
+    public List<StudentCertificate> getCertificateByStudentId(@PathVariable("student_id") String student_id) {
+        return service.getCertificateByStudentId(student_id);
+    }
+    
+
+    @GetMapping("/delete/{certificate_id}")
+    public boolean deleteUserCertificate(@PathVariable("certificate_id") Integer certificateId) {
+        service.deleteById(certificateId);
+        return true;
     }
 }
