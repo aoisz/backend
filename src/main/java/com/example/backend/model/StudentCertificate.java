@@ -25,18 +25,56 @@ public class StudentCertificate {
     private Date startDate;
     private Date expiredDate;
     private String grade;
-    private float score;
+    private float totalScore;
+    private float listeningScore;
+    private float readingScore;
+    private String status;
 
-    public StudentCertificate(int id, Students student, Certificates certificate, Date startDate, Date expiredDate, String grade, float score) {
+    public StudentCertificate(int id, Students student, Certificates certificate, Date startDate, Date expiredDate, String grade, float totalScore, float listeningScore, float readingScore, String status) {
         this.id = id;
         this.student = student;
         this.certificate = certificate;
         this.startDate = startDate;
         this.expiredDate = expiredDate;
         this.grade = grade;
-        this.score = score;
+        this.totalScore = totalScore;
+        this.listeningScore = listeningScore;
+        this.readingScore = readingScore;
+        this.status = status;
     }
 
+    public float getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(float totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public float getListeningScore() {
+        return listeningScore;
+    }
+
+    public void setListeningScore(float listeningScore) {
+        this.listeningScore = listeningScore;
+    }
+
+    public float getReadingScore() {
+        return readingScore;
+    }
+
+    public void setReadingScore(float readingScore) {
+        this.readingScore = readingScore;
+    }
+
+    public String isStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     public StudentCertificate() {
     }
 
@@ -88,11 +126,4 @@ public class StudentCertificate {
         this.grade = grade;
     }
 
-    public float getScore() {
-        return score;
-    }
-
-    public void setScore(float score) {
-        this.score = score;
-    }
 }

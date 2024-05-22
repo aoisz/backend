@@ -95,7 +95,7 @@ public class OcrServiceImpl implements OcrService{
     }
     
     public static void processScoreImage(String filePath) {
-        ProcessStarter.setGlobalSearchPath("C:\\Program Files\\ImageMagick-7.1.1-Q16-HDRI");
+        ProcessStarter.setGlobalSearchPath("D:\\program\\ImageMagick-7.1.1-Q16-HDRI");
         ConvertCmd cmd = new ConvertCmd();
         IMOperation op = new IMOperation();
         op.addImage(filePath);
@@ -120,7 +120,7 @@ public class OcrServiceImpl implements OcrService{
     
     public File storeFile(MultipartFile file, String newFileName, String id) {
         try {
-            File tempFile = new File("D:\\AllProject\\KLTN\\Store\\"+ id);
+            File tempFile = new File("src/main/resources/images/ocr/"+ id);
             if(!tempFile.exists()) {
                 tempFile.mkdirs();
             }
