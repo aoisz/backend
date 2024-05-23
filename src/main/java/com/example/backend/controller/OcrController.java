@@ -5,6 +5,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.service.OcrService;
+import com.example.backend.template.CertificateFull;
 import com.example.backend.template.CertificateInformation;
 import com.example.backend.template.CertificateScore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,9 @@ public class OcrController {
     public ResponseEntity<CertificateScore> processScore(@RequestParam("file") MultipartFile file, @RequestParam("studentId") String studentId) {
         return ResponseEntity.ok(ocrService.getScore(file, studentId));
     }
+    
+    @PostMapping("/upload/full")
+    public ResponseEntity<CertificateFull> saveFullImage(@RequestParam("file") MultipartFile file, @RequestParam("studentId") String studentId) {
+        return ResponseEntity.ok(ocrService.saveFullImage(file, studentId));
+    }    
 }

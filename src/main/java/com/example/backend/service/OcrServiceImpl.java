@@ -4,6 +4,7 @@
  */
 package com.example.backend.service;
 
+import com.example.backend.template.CertificateFull;
 import com.example.backend.template.CertificateInformation;
 import com.example.backend.template.CertificateScore;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +50,7 @@ public class OcrServiceImpl implements OcrService{
         try {
             tesseract.setPageSegMode(11);
             String text = tesseract.doOCR(file);
-            tesseract.setPageSegMode(0);
+            tesseract.setPageSegMode(3);
             return cleanData(text);
         }
         catch(TesseractException tEx) {
@@ -95,7 +96,7 @@ public class OcrServiceImpl implements OcrService{
     }
     
     public static void processScoreImage(String filePath) {
-        ProcessStarter.setGlobalSearchPath("C:\\Program Files\\ImageMagick-7.1.1-Q16-HDRI");
+        ProcessStarter.setGlobalSearchPath("src/main/resources/image_magick");
         ConvertCmd cmd = new ConvertCmd();
         IMOperation op = new IMOperation();
         op.addImage(filePath);
@@ -120,7 +121,7 @@ public class OcrServiceImpl implements OcrService{
     
     public File storeFile(MultipartFile file, String newFileName, String id) {
         try {
-            File tempFile = new File("D:\\AllProject\\KLTN\\Store\\"+ id);
+            File tempFile = new File("C:\\images\\ocr\\"+ id);
             if(!tempFile.exists()) {
                 tempFile.mkdirs();
             }
@@ -196,7 +197,7 @@ public class OcrServiceImpl implements OcrService{
                         scoreArray.add(Integer.valueOf(element));
                     }
                 }
-                if(scoreArray.size() > 3) {
+                if(scoreArray.size() >= 3) {
                     score.totalScore = Collections.max(scoreArray);
                     for(Integer num : scoreArray) {
                         if(scoreArray.contains(score.totalScore - num)) {
@@ -205,11 +206,21 @@ public class OcrServiceImpl implements OcrService{
                         }
                     }
                     score.imageURL = imageFile.getAbsolutePath();
+                    System.out.println(score.readingScore);
+                    System.out.println(score.listeningScore);
+                    System.out.println(score.totalScore);
                 }
             } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(OcrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return score;
+    }
+    
+    @Override
+    public CertificateFull saveFullImage(MultipartFile file, String studentId) {
+        CertificateFull certificate = new CertificateFull();
+        certificate.imageURL = storeFile(file, "full", studentId).getAbsolutePath(); 
+        return certificate;
     }
 }
