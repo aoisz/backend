@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author PC
- */
 @RestController
 @RequestMapping("/ocr")
 public class OcrController {
@@ -39,5 +35,5 @@ public class OcrController {
     @PostMapping("/upload/full")
     public ResponseEntity<CertificateFull> saveFullImage(@RequestParam("file") MultipartFile file, @RequestParam("studentId") String studentId) {
         return ResponseEntity.ok(ocrService.saveFullImage(file, studentId));
-    }    
+    }
 }

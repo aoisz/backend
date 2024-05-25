@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Certificates;
+import com.example.backend.model.StudentCertificate;
 import com.example.backend.repository.CertificateRepository;
 import com.example.backend.template.TempCertificate;
 import java.util.List;
@@ -24,6 +25,6 @@ public class CertificateServiceImpl implements CertificateService{
 
     @Override
     public boolean create(TempCertificate tempCertificate) {
-        return true;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

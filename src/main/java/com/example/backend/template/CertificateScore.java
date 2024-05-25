@@ -9,7 +9,7 @@ package com.example.backend.template;
  * @author PC
  */
 public class CertificateScore {
-    public String imageURL = "";
+    public String image = "";
     public int listeningScore = 0;
     public int readingScore = 0;
     public int totalScore = 0;

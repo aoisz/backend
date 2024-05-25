@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.StudentCertificate;
+import com.example.backend.template.TempCertificate;
 import java.util.List;
 
 public interface StudentCertificateService {
@@ -9,4 +10,5 @@ public interface StudentCertificateService {
     public List<StudentCertificate> getByCeritificateId(int id);
     public List<StudentCertificate> getCertificateByStudentId(String id);
     public boolean deleteById(Integer certificateId);
+    public boolean create(TempCertificate tempCert, String studentId);
 }

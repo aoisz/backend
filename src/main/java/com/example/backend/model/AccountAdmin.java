@@ -29,6 +29,9 @@ public class AccountAdmin {
         this.username = username;
     }
 
+    public AccountAdmin() {
+    }
+
     public Integer getId() {
         return id;
     }

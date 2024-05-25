@@ -5,10 +5,13 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Account;
+import com.example.backend.model.AccountAdmin;
+import com.example.backend.repository.AccountAdminRepository;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.template.AccountTemplate;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService{
     @Autowired
     private AccountRepository repository;
+    @Autowired
+    private AccountAdminRepository adminRepository;
 
     @Override
     public List<Account> getAllAccount() {
@@ -33,26 +38,47 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public String login(AccountTemplate input) {
-        List<Account> accounts = repository.findAll();
-        Account account = new Account();
         String status = "notexist";
-        boolean accountExist = false;
-        for(Account acc : accounts) {
-            if(acc.getUsername().equals(input.getUsername())) {
-                accountExist = true;
-                account = acc;
-                break;
+        if(StringUtils.isNumeric(input.getUsername())) {
+            List<Account> accounts = repository.findAll();
+            Account account = new Account();
+            boolean accountExist = false;
+            for(Account acc : accounts) {
+                if(acc.getUsername().equals(input.getUsername())) {
+                    accountExist = true;
+                    account = acc;
+                    break;
+                }
+            }
+            if(accountExist) {
+                if (account.getPassword().equals(input.getPassword())) {
+                    status = account.getUsername();
+                }
+                else {
+                    status = "error";
+                }
             }
         }
-        if(accountExist) {
-            if (account.getPassword().equals(input.getPassword())) {
-                status = account.getUsername();
+        else {
+            List<AccountAdmin> adminAccount = adminRepository.findAll();
+            AccountAdmin adAccount = new AccountAdmin();
+            boolean accountExist = false;
+            for(AccountAdmin acc : adminAccount) {
+                if(input.getUsername().equals(acc.getUsername())) {
+                    adAccount = acc;
+                    accountExist = true;
+                    break;
+                }
             }
-            else {
-                status = "error";
+            if(accountExist) {
+                if (adAccount.getPassword().equals(input.getPassword())) {
+                    status = adAccount.getUsername();
+                }
+                else {
+                    status = "error";
+                }
             }
         }
-        System.out.print(status);
         return status;
     }
 }

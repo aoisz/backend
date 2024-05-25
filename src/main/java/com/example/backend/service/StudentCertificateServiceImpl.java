@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.CertificateImage;
 import com.example.backend.model.Certificates;
 import com.example.backend.model.StudentCertificate;
 import com.example.backend.model.Students;
@@ -8,7 +9,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.repository.StudentCertificateRepository;
+import com.example.backend.template.TempCertificate;
 import static java.lang.Integer.parseInt;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -21,6 +26,8 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     private CertificateService certService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ImageService imgService;
     
     @Override
     public List<StudentCertificate> getAllUserCertificate() {
@@ -42,6 +49,40 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     public List<StudentCertificate> getCertificateByStudentId(String student_id) {
         Students student = studentService.getByStudentId(student_id);
         return repository.findByStudent(student);
+    }
+
+    @Override
+    public boolean create(TempCertificate tempCertificate, String studentId) {
+        StudentCertificate studentCert = new StudentCertificate();
+        List<StudentCertificate> list = getCertificateByStudentId(studentId);
+        for(StudentCertificate stdnCert : list) {
+            if(stdnCert.getCertificate().getId() == 1 && stdnCert.getStudent().getStudentId().equals(studentId)) {
+                studentCert = stdnCert;
+                break;
+            }
+        }
+        CertificateImage img = new CertificateImage();
+        img.setFullImage(tempCertificate.full.image);
+        img.setInforImage(tempCertificate.information.image);
+        img.setScoreImage(tempCertificate.score.image);
+        imgService.uploadImage(img);
+        studentCert.setImages(img);
+        studentCert.setCertificate(certService.getById(1));
+        studentCert.setStudent(studentService.getByStudentId(studentId));
+        studentCert.setStartDate(formatDate(tempCertificate.information.testDate));
+        studentCert.setExpiredDate(tempCertificate.information.validUntil);
+        studentCert.setListeningScore(tempCertificate.score.listeningScore);
+        studentCert.setReadingScore(tempCertificate.score.readingScore);
+        studentCert.setTotalScore(tempCertificate.score.totalScore);
+        repository.save(studentCert);
+        return true;
+    }
+    
+    public static String formatDate(String text) {
+        String[] temp = text.split("/");
+        List<String> list = Arrays.asList(temp);
+        Collections.reverse(list);
+        return list.stream().map(n -> String.valueOf(n)).collect(Collectors.joining("/", "", ""));
     }
     
     @Override

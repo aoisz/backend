@@ -28,7 +28,7 @@ public class CertificateController {
     }
     @PostMapping("/create")
     public boolean create(@RequestBody TempCertificate tempCertificate) {
-        System.out.println(tempCertificate.getStudentId());
+        service.create(tempCertificate);
         return true;
     }
 }

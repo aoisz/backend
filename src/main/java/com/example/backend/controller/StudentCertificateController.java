@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.service.StudentCertificateService;
+import com.example.backend.template.TempCertificate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +27,19 @@ public class StudentCertificateController {
         return service.getByCeritificateId(certificate_id);
     }
     
+    @GetMapping("/getById/{id}")
+    public StudentCertificate getById(@PathVariable("id") int id) {
+        return service.getById(id);
+    }
+    
     @GetMapping("/getCertificateByStudentId/{student_id}")
     public List<StudentCertificate> getCertificateByStudentId(@PathVariable("student_id") String student_id) {
         return service.getCertificateByStudentId(student_id);
+    }
+    
+    @PostMapping("/create")
+    public boolean create(@RequestBody TempCertificate temp) {
+        return service.create(temp, temp.getStudentId());
     }
     
 

@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.util.Date;
 
 @Entity
@@ -16,27 +17,69 @@ public class StudentCertificate {
     
     @ManyToOne
     @JoinColumn(name="studentId", nullable = false, referencedColumnName = "studentId")
-    private Students student;
+    private Students student; 
+    
+    @OneToOne
+    @JoinColumn(name="image", referencedColumnName = "id")
+    private CertificateImage images;
     
     @ManyToOne
     @JoinColumn(name="certificateId")
     private Certificates certificate;
     
-    private Date startDate;
-    private Date expiredDate;
+    private String startDate;
+    private String expiredDate;
     private String grade;
-    private float score;
+    private float totalScore;
+    private float listeningScore;
+    private float readingScore;
+    private String status;
 
-    public StudentCertificate(int id, Students student, Certificates certificate, Date startDate, Date expiredDate, String grade, float score) {
+    public StudentCertificate(int id, Students student, Certificates certificate, String startDate, String expiredDate, String grade, float totalScore, float listeningScore, float readingScore, String status) {
         this.id = id;
         this.student = student;
         this.certificate = certificate;
         this.startDate = startDate;
         this.expiredDate = expiredDate;
         this.grade = grade;
-        this.score = score;
+        this.totalScore = totalScore;
+        this.listeningScore = listeningScore;
+        this.readingScore = readingScore;
+        this.status = status;
     }
 
+    public float getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(float totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public float getListeningScore() {
+        return listeningScore;
+    }
+
+    public void setListeningScore(float listeningScore) {
+        this.listeningScore = listeningScore;
+    }
+
+    public float getReadingScore() {
+        return readingScore;
+    }
+
+    public void setReadingScore(float readingScore) {
+        this.readingScore = readingScore;
+    }
+
+    public String isStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     public StudentCertificate() {
     }
 
@@ -64,19 +107,19 @@ public class StudentCertificate {
         this.certificate = certificate;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getExpiredDate() {
+    public String getExpiredDate() {
         return expiredDate;
     }
 
-    public void setExpiredDate(Date expiredDate) {
+    public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
     }
 
@@ -88,11 +131,12 @@ public class StudentCertificate {
         this.grade = grade;
     }
 
-    public float getScore() {
-        return score;
+    public CertificateImage getImages() {
+        return images;
     }
 
-    public void setScore(float score) {
-        this.score = score;
+    public void setImages(CertificateImage images) {
+        this.images = images;
     }
+    
 }

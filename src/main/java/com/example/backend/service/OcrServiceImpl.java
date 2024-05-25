@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.apache.commons.io.FileUtils;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
@@ -48,7 +50,7 @@ public class OcrServiceImpl implements OcrService{
     
     public String extractRawScore(File file) {
         try {
-            tesseract.setPageSegMode(11);
+            tesseract.setPageSegMode(4);
             String text = tesseract.doOCR(file);
             tesseract.setPageSegMode(3);
             return cleanData(text);
@@ -122,6 +124,7 @@ public class OcrServiceImpl implements OcrService{
     public File storeFile(MultipartFile file, String newFileName, String id) {
         try {
             File tempFile = new File("C:\\images\\ocr\\"+ id);
+//            File tempFile = new File("src/main/resources/images/ocr/"+ id);
             if(!tempFile.exists()) {
                 tempFile.mkdirs();
             }
@@ -136,6 +139,17 @@ public class OcrServiceImpl implements OcrService{
             return null;
         }
     }
+    
+    public String toBase64Image(File file) {
+        try {
+            byte[] fileContent = FileUtils.readFileToByteArray(file);
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            return encodedString;
+        } catch (IOException ex) {
+            Logger.getLogger(OcrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
 
     @Override
     public CertificateInformation getInformation(MultipartFile file, String studentId) {
@@ -144,7 +158,6 @@ public class OcrServiceImpl implements OcrService{
         CertificateInformation infor = new CertificateInformation();
         if(!text.isEmpty()) {
             text = text.replaceAll("\\s+", "-");
-            System.out.println(text);
             String[] rawArray = text.split("-");
             String tempName = "";
             for(int i = 0; i < rawArray.length-1; i++) {
@@ -152,7 +165,7 @@ public class OcrServiceImpl implements OcrService{
                     tempName += " " + rawArray[i];
                 }
                 else {
-                    infor.studentName = cleanString(tempName).trim();
+                    infor.studentName = cleanString(tempName).trim().replaceAll("\\d", "");
                     infor.id = rawArray[i+1];
                     infor.birthDay = formatDate(rawArray[i+2]);
                 }
@@ -173,7 +186,7 @@ public class OcrServiceImpl implements OcrService{
                     }
                 }
             }
-            infor.imageURL = imageFile.getAbsolutePath();
+            infor.image = toBase64Image(imageFile);
         }
         return infor;
     }
@@ -189,12 +202,14 @@ public class OcrServiceImpl implements OcrService{
             try {
                 text = text.replaceAll("\\s+", "-");
                 text = new String(text.getBytes("UTF-8"), "ASCII");
+                System.out.println(text);
                 String[] splitArray = text.split("-");
                 List<Integer> scoreArray = new ArrayList<>();
                 for (String element : splitArray) {
                     element = element.replaceAll("[^0-9]", "");
                     if(StringUtils.isNumeric(element)) {
                         scoreArray.add(Integer.valueOf(element));
+                        System.out.println(Integer.valueOf(element));
                     }
                 }
                 if(scoreArray.size() >= 3) {
@@ -205,10 +220,7 @@ public class OcrServiceImpl implements OcrService{
                             score.listeningScore = score.totalScore - num;
                         }
                     }
-                    score.imageURL = imageFile.getAbsolutePath();
-                    System.out.println(score.readingScore);
-                    System.out.println(score.listeningScore);
-                    System.out.println(score.totalScore);
+                    score.image = toBase64Image(imageFile);
                 }
             } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(OcrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -220,7 +232,7 @@ public class OcrServiceImpl implements OcrService{
     @Override
     public CertificateFull saveFullImage(MultipartFile file, String studentId) {
         CertificateFull certificate = new CertificateFull();
-        certificate.imageURL = storeFile(file, "full", studentId).getAbsolutePath(); 
+        certificate.image = toBase64Image(storeFile(file, "full", studentId)); 
         return certificate;
     }
 }

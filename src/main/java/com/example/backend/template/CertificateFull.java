@@ -9,5 +9,5 @@ package com.example.backend.template;
  * @author PC
  */
 public class CertificateFull {
-    public String imageURL = "";
+    public String image = "";
 }
