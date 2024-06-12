@@ -58,10 +58,12 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     @Override
     public boolean create(TempCertificate tempCertificate, String studentId) {
         StudentCertificate studentCert = new StudentCertificate();
+        CertificateImage img = new CertificateImage();
         List<StudentCertificate> list = getCertificateByStudentId(studentId);
         for(StudentCertificate stdnCert : list) {
             if(stdnCert.getCertificate().getId() == 1 && stdnCert.getStudent().getStudentId().equals(studentId)) {
                 studentCert = stdnCert;
+                img = imageRepository.findById(stdnCert.getImages().getId()).get();
                 break;
             }
         }
@@ -70,7 +72,6 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
         srcImage.put("information", tempCertificate.information.imageURL);
         srcImage.put("score", tempCertificate.score.imageURL);
         srcImage = imageService.uploadImages(srcImage, studentId);
-        CertificateImage img = new CertificateImage();
         img.setFullImage(srcImage.get("full"));
         img.setInforImage(srcImage.get("information"));
         img.setScoreImage(srcImage.get("score"));
