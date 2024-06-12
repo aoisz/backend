@@ -37,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class OcrServiceImpl implements OcrService{
     @Autowired
     private Tesseract tesseract;
-    
     public String extractRawInformation(File file) {
         try {
             String text = tesseract.doOCR(file);
@@ -186,7 +185,7 @@ public class OcrServiceImpl implements OcrService{
                     }
                 }
             }
-            infor.image = toBase64Image(imageFile);
+            infor.imageURL = imageFile.getAbsolutePath();
         }
         return infor;
     }
@@ -195,9 +194,11 @@ public class OcrServiceImpl implements OcrService{
     public CertificateScore getScore(MultipartFile file, String studentId) {
         CertificateScore score = new CertificateScore();
         File imageFile = storeFile(file, "score", studentId);
-        processScoreImage(imageFile.getAbsolutePath());
-        processScoreImage(imageFile.getAbsolutePath());
-        String text = extractRawScore(imageFile);
+        File tempImageFile = storeFile(file, "tempScore", studentId);
+        processScoreImage(tempImageFile.getAbsolutePath());
+        processScoreImage(tempImageFile.getAbsolutePath());
+        String text = extractRawScore(tempImageFile);
+        
         if(!text.isBlank()) {
             try {
                 text = text.replaceAll("\\s+", "-");
@@ -220,7 +221,7 @@ public class OcrServiceImpl implements OcrService{
                             score.listeningScore = score.totalScore - num;
                         }
                     }
-                    score.image = toBase64Image(imageFile);
+                    score.imageURL = imageFile.getAbsolutePath();
                 }
             } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(OcrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -232,7 +233,7 @@ public class OcrServiceImpl implements OcrService{
     @Override
     public CertificateFull saveFullImage(MultipartFile file, String studentId) {
         CertificateFull certificate = new CertificateFull();
-        certificate.image = toBase64Image(storeFile(file, "full", studentId)); 
+        certificate.imageURL = storeFile(file, "full", studentId).getAbsolutePath(); 
         return certificate;
     }
 }

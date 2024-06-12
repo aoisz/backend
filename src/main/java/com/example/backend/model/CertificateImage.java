@@ -17,14 +17,24 @@ public class CertificateImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String fullImage;
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String inforImage;
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String scoreImage;
+
+    public CertificateImage() {
+    }
+
+    public CertificateImage(int id, String fullImage, String inforImage, String scoreImage) {
+        this.id = id;
+        this.fullImage = fullImage;
+        this.inforImage = inforImage;
+        this.scoreImage = scoreImage;
+    }
 
     public int getId() {
         return id;

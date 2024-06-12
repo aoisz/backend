@@ -9,5 +9,17 @@ package com.example.backend.template;
  * @author PC
  */
 public class CertificateFull {
-    public String image = "";
+    public String imageURL = "";
+
+    public CertificateFull() {
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+    
 }

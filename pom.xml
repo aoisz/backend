@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
+		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -52,7 +52,7 @@
                 <dependency>
                     <groupId>com.google.firebase</groupId>
                     <artifactId>firebase-admin</artifactId>
-                    <version>9.2.0</version>
+                    <version>9.3.0</version>
                 </dependency>
 	</dependencies>
 

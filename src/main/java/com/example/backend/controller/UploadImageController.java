@@ -7,17 +7,25 @@ package com.example.backend.controller;
 import com.example.backend.model.CertificateImage;
 import com.example.backend.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/image")
 public class UploadImageController {
     @Autowired
-    ImageService service;
-    @PostMapping("upload")
-    public boolean uploadImage(CertificateImage images) {
-        return service.uploadImage(images);
+    private ImageService service;
+    @PostMapping("/upload")
+    public ResponseEntity uploadImage(
+            @RequestParam(name = "filePath") String filePath, 
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "studentId") String studentId
+    ) {
+        String fileName = service.uploadImage(filePath, type, studentId);
+        return ResponseEntity.ok(fileName);
     }    
 }

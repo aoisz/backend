@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,7 @@ public class StudentCertificate {
     @JoinColumn(name="studentId", nullable = false, referencedColumnName = "studentId")
     private Students student; 
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="image", referencedColumnName = "id")
     private CertificateImage images;
     

@@ -5,6 +5,7 @@ import com.example.backend.model.Certificates;
 import com.example.backend.model.StudentCertificate;
 import com.example.backend.model.Students;
 import com.example.backend.repository.CertificateRepository;
+import com.example.backend.repository.ImageRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.example.backend.template.TempCertificate;
 import static java.lang.Integer.parseInt;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,11 +25,13 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     @Autowired
     private StudentCertificateRepository repository;
     @Autowired
+    private ImageRepository imageRepository;
+    @Autowired
     private CertificateService certService;
     @Autowired
     private StudentService studentService;
     @Autowired
-    private ImageService imgService;
+    private ImageService imageService;
     
     @Override
     public List<StudentCertificate> getAllUserCertificate() {
@@ -61,11 +65,16 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
                 break;
             }
         }
+        HashMap<String, String> srcImage = new HashMap<>();
+        srcImage.put("full", tempCertificate.full.imageURL);
+        srcImage.put("information", tempCertificate.information.imageURL);
+        srcImage.put("score", tempCertificate.score.imageURL);
+        srcImage = imageService.uploadImages(srcImage, studentId);
         CertificateImage img = new CertificateImage();
-        img.setFullImage(tempCertificate.full.image);
-        img.setInforImage(tempCertificate.information.image);
-        img.setScoreImage(tempCertificate.score.image);
-        imgService.uploadImage(img);
+        img.setFullImage(srcImage.get("full"));
+        img.setInforImage(srcImage.get("information"));
+        img.setScoreImage(srcImage.get("score"));
+        imageRepository.save(img);
         studentCert.setImages(img);
         studentCert.setCertificate(certService.getById(1));
         studentCert.setStudent(studentService.getByStudentId(studentId));

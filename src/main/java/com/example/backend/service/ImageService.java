@@ -4,8 +4,10 @@
  */
 package com.example.backend.service;
 
-import com.example.backend.model.CertificateImage;
+import java.util.Map;
+import java.util.HashMap;
 
 public interface ImageService {
-    public boolean uploadImage(CertificateImage images);
+    public String uploadImage(String filePath, String type, String studentId);
+    public HashMap<String, String> uploadImages(Map<String, String> srcImage, String studentId);
 }
