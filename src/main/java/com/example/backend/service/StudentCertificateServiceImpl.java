@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.CertificateImage;
+import com.example.backend.model.CertificateStatus;
 import com.example.backend.model.Certificates;
 import com.example.backend.model.StudentCertificate;
 import com.example.backend.model.Students;
@@ -26,6 +27,8 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     private CertificateService certService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private CertificateStatusService certStatusService;
     @Autowired
     private ImageService imgService;
     
@@ -99,4 +102,12 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
         }
     }
 
+    @Override
+    public boolean updateStatus(int certId, String status) {
+        StudentCertificate cert = repository.findById(certId).get();
+        CertificateStatus certStatus = certStatusService.getByName(status);
+        cert.setStatus(certStatus);
+        repository.save(cert);
+        return true;
+    }
 }

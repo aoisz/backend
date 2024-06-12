@@ -11,6 +11,7 @@ import com.example.backend.template.TempCertificate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/student_certificate")
@@ -47,5 +48,10 @@ public class StudentCertificateController {
     public boolean deleteUserCertificate(@PathVariable("certificate_id") Integer certificateId) {
         service.deleteById(certificateId);
         return true;
+    }
+    
+    @PostMapping("/update_status")
+    public boolean updateStatus(@RequestParam("certId") int certId, @RequestParam("statusValue") String status) {
+        return service.updateStatus(certId, status);
     }
 }

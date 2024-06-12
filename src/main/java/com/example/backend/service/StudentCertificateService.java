@@ -11,4 +11,5 @@ public interface StudentCertificateService {
     public List<StudentCertificate> getCertificateByStudentId(String id);
     public boolean deleteById(Integer certificateId);
     public boolean create(TempCertificate tempCert, String studentId);
+    public boolean updateStatus(int certId, String status);
 }
