@@ -38,8 +38,11 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public String login(AccountTemplate input) {
-        String status = "notexist";
-        if(StringUtils.isNumeric(input.getUsername())) {
+        String status = isAdmin(input);
+        if (status.equals("admin")) {
+            return status;
+        }
+        else {
             List<Account> accounts = repository.findAll();
             Account account = new Account();
             boolean accountExist = false;
@@ -57,26 +60,28 @@ public class AccountServiceImpl implements AccountService{
                 else {
                     status = "error";
                 }
+            } 
+        }
+        return status;
+    }
+    public String isAdmin(AccountTemplate input) {
+        List<AccountAdmin> adminAccount = adminRepository.findAll();
+        AccountAdmin adAccount = new AccountAdmin();
+        String status = "notexist";
+        boolean accountExist = false;
+        for(AccountAdmin acc : adminAccount) {
+            if(input.getUsername().equals(acc.getUsername())) {
+                adAccount = acc;
+                accountExist = true;
+                break;
             }
         }
-        else {
-            List<AccountAdmin> adminAccount = adminRepository.findAll();
-            AccountAdmin adAccount = new AccountAdmin();
-            boolean accountExist = false;
-            for(AccountAdmin acc : adminAccount) {
-                if(input.getUsername().equals(acc.getUsername())) {
-                    adAccount = acc;
-                    accountExist = true;
-                    break;
-                }
+        if(accountExist) {
+            if (adAccount.getPassword().equals(input.getPassword())) {
+                status = "admin";
             }
-            if(accountExist) {
-                if (adAccount.getPassword().equals(input.getPassword())) {
-                    status = adAccount.getUsername();
-                }
-                else {
-                    status = "error";
-                }
+            else {
+                status = "error";
             }
         }
         return status;

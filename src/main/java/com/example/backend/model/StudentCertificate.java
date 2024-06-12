@@ -34,18 +34,21 @@ public class StudentCertificate {
     private float totalScore;
     private float listeningScore;
     private float readingScore;
-    private String status;
+    
+    @ManyToOne
+    @JoinColumn(name="status")
+    private CertificateStatus status;
 
-    public StudentCertificate(int id, Students student, Certificates certificate, String startDate, String expiredDate, String grade, float totalScore, float listeningScore, float readingScore, String status) {
+    public StudentCertificate(int id, Students student, CertificateImage images, Certificates certificate, String startDate, String expiredDate, String grade, float totalScore, float listeningScore, CertificateStatus status) {
         this.id = id;
         this.student = student;
+        this.images = images;
         this.certificate = certificate;
         this.startDate = startDate;
         this.expiredDate = expiredDate;
         this.grade = grade;
         this.totalScore = totalScore;
         this.listeningScore = listeningScore;
-        this.readingScore = readingScore;
         this.status = status;
     }
 
@@ -73,14 +76,6 @@ public class StudentCertificate {
         this.readingScore = readingScore;
     }
 
-    public String isStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    
     public StudentCertificate() {
     }
 
@@ -138,6 +133,14 @@ public class StudentCertificate {
 
     public void setImages(CertificateImage images) {
         this.images = images;
+    }
+
+    public CertificateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CertificateStatus status) {
+        this.status = status;
     }
     
 }
