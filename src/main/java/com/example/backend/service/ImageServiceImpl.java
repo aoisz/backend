@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +33,15 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageRepository repository;
     private Storage storage;
-    
+    private final String bucket = "backend-c4e58.appspot.com";
+    private final String projectID = "backend-c4e58";
     @EventListener
     public void init(ApplicationReadyEvent event) {
         try {
             ClassPathResource serviceAccount = new ClassPathResource("serviceAccountKey.json");
             storage = StorageOptions.newBuilder().
                     setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream())).
-                    setProjectId("backend-c4e58").build().getService();
+                    setProjectId(projectID).build().getService();
         } catch (IOException ex) {
         }
     }
@@ -61,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
             String imageName = generateFileName(file.getName(), type);
             Map<String, String> map = new HashMap<>();
             map.put("firebaseStorageDownloadTokens", studentId + "/" + imageName);
-            BlobId blobId = BlobId.of("backend-c4e58.appspot.com", studentId + "/" + imageName);
+            BlobId blobId = BlobId.of(bucket, studentId + "/" + imageName);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                     .setMetadata(map)
                     .setContentType(Files.probeContentType(Path.of(filePath)))
@@ -77,6 +79,25 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException ex) {
             return "";
         }
+    }
+    
+    @Override
+    public boolean deleteFiles(List<String> images) {
+        List<BlobId> listBlobId = new ArrayList<>();
+        for(String url : images) {
+            String[] temp = url.replace("?alt=media", "").split("o/");
+            String str = temp[1];
+            temp = str.split("%2F");
+            BlobId blobId = BlobId.of(bucket, temp[0] + "/" + temp[1]);
+            listBlobId.add(blobId);
+        }
+        List<Boolean> results = storage.delete(listBlobId);
+        for(Boolean result : results) {
+            if(!result) {
+                return result;
+            }
+        }
+        return true;
     }
     
     private String generateFileName(String originalFileName, String type) {

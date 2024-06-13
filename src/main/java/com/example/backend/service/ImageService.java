@@ -6,8 +6,10 @@ package com.example.backend.service;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 public interface ImageService {
     public String uploadImage(String filePath, String type, String studentId);
     public HashMap<String, String> uploadImages(Map<String, String> srcImage, String studentId);
+    public boolean deleteFiles(List<String> images);
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.repository.StudentCertificateRepository;
 import com.example.backend.template.TempCertificate;
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -83,7 +84,7 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
         studentCert.setCertificate(certService.getById(1));
         studentCert.setStudent(studentService.getByStudentId(studentId));
         studentCert.setStartDate(formatDate(tempCertificate.information.testDate));
-        studentCert.setExpiredDate(tempCertificate.information.validUntil);
+        studentCert.setExpiredDate(formatDate(tempCertificate.information.validUntil));
         studentCert.setListeningScore(tempCertificate.score.listeningScore);
         studentCert.setReadingScore(tempCertificate.score.readingScore);
         studentCert.setTotalScore(tempCertificate.score.totalScore);
@@ -101,6 +102,16 @@ public class StudentCertificateServiceImpl implements StudentCertificateService 
     @Override
     public boolean deleteById(Integer certificateId) {
         try {
+            StudentCertificate stdnCert = repository.findById(certificateId).get();
+            int certImagesID = stdnCert.getImages().getId();
+            List<String> images = new ArrayList<>();
+            images.add(stdnCert.getImages().getFullImage());
+            images.add(stdnCert.getImages().getInforImage());
+            images.add(stdnCert.getImages().getScoreImage());
+            boolean deleteImgResult = imageService.deleteFiles(images);
+            if(deleteImgResult) {
+                imageRepository.deleteById(certImagesID);
+            }
             repository.deleteById(certificateId);
             return true;
         } catch (EmptyResultDataAccessException ex) {
