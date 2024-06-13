@@ -4,6 +4,7 @@
  */
 package com.example.backend.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,8 +22,9 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
-    @JoinColumn(name="id")
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="studentId", referencedColumnName = "studentId")
     private Students student;
     private String password;
     private String username;

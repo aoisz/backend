@@ -5,6 +5,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Account;
+import com.example.backend.model.Students;
 import com.example.backend.template.AccountTemplate;
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface AccountService {
     public List<Account> getAllAccount();
     public Account getById(int id);
     public String login(AccountTemplate account);
+    public String changePassword(String studentId, String oldPwd, String newPwd);
+    public List<Account> getByStudent(String studentId);
+    public boolean resetPassword(String studentId);
 }

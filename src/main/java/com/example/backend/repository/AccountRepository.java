@@ -5,7 +5,9 @@
 package com.example.backend.repository;
 
 import com.example.backend.model.Account;
+import com.example.backend.model.Students;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -14,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AccountRepository extends JpaRepository<Account,Integer>{
     public List<Account> findAll();
+    public Optional<List<Account>> findByStudent(Students student);
 }

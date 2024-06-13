@@ -25,5 +25,4 @@ public class StudentServiceImpl implements StudentService {
     public Students getByStudentId(String studentId) {
         return repository.findByStudentId(studentId).get();
     }
-    
 }
